@@ -1,1 +1,217 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Search — Minimal Google-like Page</title>
+    <style>
+         :root {
+            --bg: #fff;
+            --muted: #70757a;
+            --accent-1: #4285F4;
+            /* blue */
+            --accent-2: #DB4437;
+            /* red */
+            --accent-3: #F4B400;
+            /* yellow */
+            --accent-4: #0F9D58;
+            /* green */
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+        
+        html,
+        body {
+            height: 100%;
+        }
+        
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: #202124;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        /* Logo */
+        
+        .logo {
+            font-weight: 700;
+            font-size: 70px;
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+        
+        .logo span {
+            display: inline-block
+        }
+        
+        .g1 {
+            color: var(--accent-1)
+        }
+        
+        .g2 {
+            color: var(--accent-2)
+        }
+        
+        .g3 {
+            color: var(--accent-3)
+        }
+        
+        .g4 {
+            color: var(--accent-1)
+        }
+        
+        .g5 {
+            color: var(--accent-4)
+        }
+        /* Search box */
+        
+        .search-wrap {
+            width: min(650px, 90%);
+        }
+        
+        form.search {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #dfe1e5;
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+            border-radius: 24px;
+            padding: 10px 16px
+        }
+        
+        .search input[type="search"] {
+            flex: 1;
+            border: 0;
+            outline: 0;
+            font-size: 16px;
+            padding: 8px
+        }
+        
+        .icons {
+            display: flex;
+            gap: 8px;
+            align-items: center
+        }
+        
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            cursor: pointer
+        }
+        
+        .icon-btn:hover {
+            background: #f6f6f6
+        }
+        /* Buttons */
+        
+        .buttons {
+            margin-top: 18px;
+            display: flex;
+            gap: 8px
+        }
+        
+        .btn {
+            background: #f8f9fa;
+            border: 1px solid #f1f3f4;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px
+        }
+        
+        .btn.primary {
+            background: #1a73e8;
+            color: #fff;
+            border: none
+        }
+        /* Footer small text */
+        
+        .muted {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 28px
+        }
+        
+        @media (max-width:480px) {
+            .logo {
+                font-size: 48px
+            }
+            .buttons {
+                flex-direction: column;
+                width: 80%
+            }
+            .btn {
+                width: 100%;
+                text-align: center
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!--
+    Minimal Google-like search page.
+    Save as index.html and open in browser. The search form will redirect to Google search.
+  -->
+
+    <div class="logo" aria-hidden="true">
+        <span class="g1">G</span>
+        <span class="g2">o</span>
+        <span class="g3">o</span>
+        <span class="g4">g</span>
+        <span class="g5">l</span>
+        <span class="g2">e</span>
+    </div>
+
+    <div class="search-wrap">
+        <form class="search" id="searchForm" action="https://www.google.com/search" method="get" role="search">
+            <input type="search" name="q" id="q" placeholder="Search Google or type a URL" aria-label="Search" autofocus />
+            <div class="icons" aria-hidden="true">
+                <div class="icon-btn" title="Voice (fake)">🎤</div>
+                <div class="icon-btn" title="Search">🔎</div>
+            </div>
+        </form>
+
+        <div class="buttons" role="group" aria-label="search buttons">
+            <button class="btn" type="button" id="lucky">I'm Feeling Lucky</button>
+            <button class="btn primary" type="submit" form="searchForm">Google Search</button>
+        </div>
+    </div>
+
+    <div class="muted">A simple static clone — not associated with Google.</div>
+
+    <script>
+        // Accessibility: Enter in input submits the form naturally.
+        // "I'm Feeling Lucky" behavior: redirect to the first Google search result using the "btnI" parameter.
+        document.getElementById('lucky').addEventListener('click', function() {
+            const q = document.getElementById('q').value.trim();
+            if (!q) {
+                // If empty, go to Google's homepage "I'm Feeling Lucky" endpoint
+                window.location.href = 'https://www.google.com/doodles';
+                return;
+            }
+            // Use Google's btnI parameter which triggers "I'm Feeling Lucky" behavior
+            const url = new URL('https://www.google.com/search');
+            url.searchParams.set('q', q);
+            url.searchParams.set('btnI', 'I');
+            window.location.href = url.toString();
+        });
+
+        // Optional: support pressing Escape to clear the box
+        document.getElementById('q').addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') e.target.value = '';
+        });
+    </script>
+</body>
+
+</html>
